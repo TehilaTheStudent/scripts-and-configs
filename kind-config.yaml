@@ -1,0 +1,44 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane
+    kubeadmConfigPatches:
+      - |
+        kind: InitConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            cgroup-driver: "cgroupfs"
+      - |
+        kind: KubeletConfiguration
+        cgroupDriver: cgroupfs
+    # add a mount from /path/to/my/files on the host to /files on the node
+    extraPortMappings:
+      - containerPort: 30008
+        hostPort: 30008
+        listenAddress: "0.0.0.0" # Optional, defaults to "0.0.0.0"
+        protocol: tcp # Optional, defaults to tcp
+    extraMounts:
+      - hostPath: /etc/ssl/certs
+        containerPath: /etc/ssl/certs
+      - hostPath: /work/models
+        containerPath: /var/models
+      - hostPath: /work/tmp
+        containerPath: /var/tmp
+      - hostPath: /work/tools/dev-env/sdlc-gitops/runtime/tiktoken_cache
+        containerPath: /work/tools/dev-env/sdlc-gitops/runtime/tiktoken_cache
+      - hostPath: /work/local-path-provisioner
+        containerPath: /work/local-path-provisioner
+      - hostPath: ~/.docker/config.json
+        containerPath: /var/lib/kubelet/config.json
+containerdConfigPatches:
+  - |-
+    [plugins."io.containerd.grpc.v1.cri"]
+    [plugins."io.containerd.grpc.v1.cri".registry]
+      [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."registry-cbu.huawei.com"]
+          endpoint = ["http://registry-cbu.huawei.com"]
+      [plugins."io.containerd.grpc.v1.cri".registry.configs]
+        [plugins."io.containerd.grpc.v1.cri".registry.configs."registry-cbu.huawei.com".tls]
+          insecure_skip_verify = true
+    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+        SystemdCgroup = false
