@@ -1,0 +1,58 @@
+components: {}
+server:
+  name: tehila_test_26_9_1
+  x-disable-ssl: true
+tools:
+  - args:
+      - description: ""
+        name: count
+        position: body
+        required: true
+        type: integer
+      - description: ""
+        items:
+          description: ""
+          properties:
+            order:
+              properties:
+                cart:
+                  properties:
+                    productId:
+                      type: string
+                    quantity:
+                      type: integer
+                  type: object
+                payment:
+                  properties:
+                    amount:
+                      type: number
+                    method:
+                      enum:
+                        - credit_card
+                        - paypal
+                        - bank_transfer
+                      type: string
+                  type: object
+              required:
+                - cart
+                - payment
+              type: object
+          required:
+            - order
+          type: object
+        name: orders
+        position: body
+        required: true
+        type: array
+    description: Create new orders - Accepts a request body with count and orders list.
+    name: tehila_test_26_9_1_post_orders
+    requestTemplate:
+      headers:
+        - key: Content-Type
+          value: application/json
+      method: POST
+      url: https://example.com/orders
+    responseTemplate:
+      prependBody: |+
+        # API Response Information
+
