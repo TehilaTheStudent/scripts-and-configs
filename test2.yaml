@@ -1,0 +1,94 @@
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        productId:
+          type: string
+        quantity:
+          type: integer
+    Order:
+      type: object
+      required:
+        - cart
+        - payment
+        - customer
+      properties:
+        cart:
+          $ref: '#/components/schemas/Cart'
+        customer:
+          type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+              format: email
+            address:
+              type: object
+              properties:
+                street:
+                  type: string
+                city:
+                  type: string
+                zipcode:
+                  type: string
+        payment:
+          $ref: '#/components/schemas/Payment'
+    Payment:
+      type: object
+      properties:
+        amount:
+          type: number
+        method:
+          type: string
+          enum: [credit_card, paypal, bank_transfer]
+    OrderResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        orderId:
+          type: string
+server:
+  name: tehila_test_26_9_1
+  x-disable-ssl: true
+tools:
+  - args:
+      - name: count
+        description: ""
+        position: body
+        required: true
+        type: integer
+      - name: orders
+        description: ""
+        position: body
+        required: true
+        type: array
+    description: Create new orders (mixed schema style)
+    name: tehila_test_26_9_1_post_orders
+    requestTemplate:
+      method: POST
+      url: /orders
+      headers:
+        - key: Content-Type
+          value: application/json
+    responseTemplate:
+      prependBody: |-
+        # API Response Information
+
+        Below is the response from an API call. To help you understand the data, I've provided:
+
+        1. A detailed description of all fields in the response structure
+        2. The complete API response
+
+        ## Response Structure
+
+        ## Original Response
+
+        ref:#/components/schemas/OrderResponse
+
