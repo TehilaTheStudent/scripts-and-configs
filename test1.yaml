@@ -1,0 +1,81 @@
+components:
+    schemas:
+        Cart:
+            properties:
+                productId:
+                    type: string
+                quantity:
+                    type: integer
+            type: object
+        CreateOrderRequest:
+            properties:
+                count:
+                    type: integer
+                orders:
+                    items:
+                        $ref: '#/components/schemas/Order'
+                    type: array
+            required:
+                - count
+                - orders
+            type: object
+        Order:
+            properties:
+                cart:
+                    $ref: '#/components/schemas/Cart'
+                payment:
+                    $ref: '#/components/schemas/Payment'
+            required:
+                - cart
+                - payment
+            type: object
+        OrderResponse:
+            properties:
+                message:
+                    type: string
+                success:
+                    type: boolean
+            type: object
+        Payment:
+            properties:
+                amount:
+                    type: number
+                method:
+                    enum:
+                        - credit_card
+                        - paypal
+                        - bank_transfer
+                    type: string
+            type: object
+server:
+    name: tehila_test_26_9_1
+    x-disable-ssl: true
+tools:
+    - args:
+        - description: ""
+          name: CreateOrderRequest
+          position: body
+          ref: '#/components/schemas/CreateOrderRequest'
+      description: Create new orders
+      name: tehila_test_26_9_1_post_orders
+      requestTemplate:
+        headers:
+            - key: Content-Type
+              value: application/json
+        method: POST
+        url: /orders
+      responseTemplate:
+        prependBody: |-
+            # API Response Information
+
+            Below is the response from an API call. To help you understand the data, I've provided:
+
+            1. A detailed description of all fields in the response structure
+            2. The complete API response
+
+            ## Response Structure
+
+
+            ## Original Response
+
+            ref:#/components/schemas/OrderResponse
