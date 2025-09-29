@@ -1,36 +1,99 @@
-args:
-    - description: ""
-      name: count
-      position: body
-      required: true
-      type: integer
-    - description: ""
-      items:
-        $ref: '#/components/schemas/Order'
-      name: orders
-      position: body
-      required: true
-      type: array
-description: Create new orders (mixed schema style)
-name: tehila_test_28_09_1_post_orders
-requestTemplate:
-    headers:
-        - key: Content-Type
-          value: application/json
-    method: POST
-    url: /orders
-responseTemplate:
-    prependBody: |-
-        # API Response Information
+components:
+    schemas:
+        Cart:
+            properties:
+                productId:
+                    type: string
+                quantity:
+                    type: integer
+            type: object
+        Order:
+            properties:
+                cart:
+                    $ref: '#/components/schemas/Cart'
+                customer:
+                    properties:
+                        address:
+                            properties:
+                                city:
+                                    type: string
+                                street:
+                                    type: string
+                                zipcode:
+                                    type: string
+                            type: object
+                        email:
+                            format: email
+                            type: string
+                        name:
+                            type: string
+                    required:
+                        - name
+                    type: object
+                payment:
+                    $ref: '#/components/schemas/Payment'
+            required:
+                - cart
+                - payment
+                - customer
+            type: object
+        OrderResponse:
+            properties:
+                message:
+                    type: string
+                orderId:
+                    type: string
+                success:
+                    type: boolean
+            type: object
+        Payment:
+            properties:
+                amount:
+                    type: number
+                method:
+                    enum:
+                        - credit_card
+                        - paypal
+                        - bank_transfer
+                    type: string
+            type: object
+server:
+    name: tehila_test_28_09_1
+    x-disable-ssl: true
+tools:
+    - args:
+        - description: ""
+          name: count
+          position: body
+          required: true
+          type: integer
+        - description: ""
+          items:
+            $ref: '#/components/schemas/Order'
+          name: orders
+          position: body
+          required: true
+          type: array
+      description: Create new orders (mixed schema style)
+      name: tehila_test_28_09_1_post_orders
+      requestTemplate:
+        headers:
+            - key: Content-Type
+              value: application/json
+        method: POST
+        url: /orders
+      responseTemplate:
+        prependBody: |-
+            # API Response Information
 
-        Below is the response from an API call. To help you understand the data, I've provided:
+            Below is the response from an API call. To help you understand the data, I've provided:
 
-        1. A detailed description of all fields in the response structure
-        2. The complete API response
+            1. A detailed description of all fields in the response structure
+            2. The complete API response
 
-        ## Response Structure
+            ## Response Structure
 
 
-        ## Original Response
+            ## Original Response
 
-        ref:#/components/schemas/OrderResponse
+            ref:#/components/schemas/OrderResponse
