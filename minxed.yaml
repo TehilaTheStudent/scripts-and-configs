@@ -1,0 +1,136 @@
+components:
+    schemas:
+        Customer:
+            properties:
+                email:
+                    format: email
+                    type: string
+                name:
+                    type: string
+            type: object
+        OrderResponse:
+            properties:
+                orderId:
+                    type: string
+                success:
+                    type: boolean
+            type: object
+        Product:
+            properties:
+                id:
+                    type: string
+                price:
+                    type: number
+                title:
+                    type: string
+            type: object
+        User:
+            properties:
+                id:
+                    type: string
+                username:
+                    type: string
+            type: object
+server:
+    name: tehila_test_28_09_1
+    x-disable-ssl: true
+tools:
+    - args:
+        - description: ""
+          name: customer
+          position: body
+          ref: '#/components/schemas/Customer'
+          required: true
+        - description: ""
+          items:
+            description: ""
+            properties:
+                discounts:
+                    items:
+                        properties:
+                            amount:
+                                type: number
+                            code:
+                                type: string
+                        type: object
+                    type: array
+                product:
+                    $ref: '#/components/schemas/Product'
+                quantity:
+                    type: integer
+            required:
+                - product
+                - quantity
+            type: object
+          name: items
+          position: body
+          required: true
+          type: array
+        - description: ""
+          name: metadata
+          position: body
+          properties:
+            audit:
+                description: ""
+                name: audit
+                position: body
+                properties:
+                    timestamp:
+                        description: ""
+                        name: timestamp
+                        position: body
+                        type: string
+                    user:
+                        description: ""
+                        name: user
+                        position: body
+                        ref: '#/components/schemas/User'
+                type: object
+            createdAt:
+                description: ""
+                name: createdAt
+                position: body
+                type: string
+            flags:
+                description: ""
+                items:
+                    description: ""
+                    properties:
+                        name:
+                            type: string
+                        value:
+                            type: boolean
+                    type: object
+                name: flags
+                position: body
+                type: array
+          required: true
+          type: object
+        - description: ""
+          name: orderId
+          position: body
+          required: true
+          type: string
+      description: Create an order with mixed schema styles
+      name: tehila_test_28_09_1_post_orders
+      requestTemplate:
+        headers:
+            - key: Content-Type
+              value: application/json
+        method: POST
+        url: /orders
+      responseTemplate:
+        prependBody: |-
+            # API Response Information
+
+            Below is the response from an API call. To help you understand the data, I've provided:
+
+            1. A detailed description of all fields in the response structure
+            2. The complete API response
+
+            ## Response Structure
+
+
+            ## Original Response
+
+            ref:#/components/schemas/OrderResponse
